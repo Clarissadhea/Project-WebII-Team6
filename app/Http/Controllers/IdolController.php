@@ -12,7 +12,8 @@ class IdolController extends Controller
      */
     public function index()
     {
-        return "Ini nanti buat jadi halaman utama daftar Idol.";
+        // Mengarahkan ke file resources/views/welcome.blade.php
+        return view('welcome');
     }
 
     /**
@@ -20,7 +21,7 @@ class IdolController extends Controller
      */
     public function create()
     {
-        //
+        return view('form_idol');
     }
 
     /**
@@ -36,7 +37,7 @@ class IdolController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return view('idols.show');
     }
 
     /**
@@ -44,7 +45,7 @@ class IdolController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('form_idol');
     }
 
     /**
