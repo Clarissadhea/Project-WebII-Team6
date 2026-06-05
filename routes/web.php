@@ -1,27 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\IdolController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes - IdolVerse Kelompok 6
-|--------------------------------------------------------------------------
-*/
+Route::get('/', [IdolController::class, 'index'])->name('home');
+Route::get('/idols', [IdolController::class, 'index'])->name('idols.index');
+Route::get('/idols/{id}', [IdolController::class, 'show'])->name('idols.show');
+Route::post('/idols/{id}/comment', [IdolController::class, 'storeComment'])->name('idols.comment.store');
 
-// 1. Halaman Publik / Fans
-Route::get('/', function () { 
-    return view('welcome'); 
-});
-
-Route::get('/idols', function () { 
-    return view('welcome'); 
-});
-
-Route::get('/idols/jennie', function () { 
-    return view('idols.show'); 
-});
-
-// 2. Halaman Autentikasi
 Route::get('/login', function () { 
     return view('login'); 
 });
@@ -30,11 +16,11 @@ Route::get('/register', function () {
     return view('register'); 
 });
 
-// 3. Halaman Admin Panel
-Route::get('/admin/dashboard', function () { 
-    return view('dashboard'); 
-});
-
+Route::get('/admin/dashboard', [IdolController::class, 'index'])->name('admin.dashboard');
 Route::get('/admin/idols/create', function () { 
     return view('form_idol'); 
-});
+})->name('admin.idols.create');
+
+Route::post('/admin/idols', [IdolController::class, 'store'])->name('admin.idols.store');
+Route::put('/admin/idols/{id}', [IdolController::class, 'update'])->name('admin.idols.update');
+Route::delete('/admin/idols/{id}', [IdolController::class, 'destroy'])->name('admin.idols.destroy');
