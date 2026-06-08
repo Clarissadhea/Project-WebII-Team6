@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +8,6 @@
 </head>
 <body class="bg-gray-50 font-sans text-gray-800">
 
-    <!-- Navbar -->
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
             <div class="flex-shrink-0 flex items-center">
@@ -23,32 +21,51 @@
         </div>
     </nav>
 
-    <!-- Banner Hero -->
     <div class="bg-gradient-to-r from-purple-600 to-pink-500 text-white py-12 text-center">
         <h1 class="text-4xl font-extrabold tracking-tight">Explore Your Favorite Idols</h1>
         <p class="mt-2 text-purple-100 max-w-md mx-auto">Encyclopedia and community discussions for K-Pop & J-Pop fans.</p>
     </div>
 
-    <!-- Grid Cards -->
     <div class="max-w-7xl mx-auto px-4 py-10">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-xl font-bold text-gray-900">Featured Idols</h2>
         </div>
+        
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            @forelse($idols as $idol)
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
                 <div class="h-48 overflow-hidden relative">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="w-full h-full object-cover">
-                    <span class="absolute top-3 right-3 bg-pink-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">BLACKPINK</span>
+                    
+                    @if($idol->foto)
+                        <img src="{{ asset('storage/' . $idol->foto) }}" class="w-full h-full object-cover">
+                    @else
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="w-full h-full object-cover">
+                    @endif
+
+                    <span class="absolute top-3 right-3 bg-pink-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+                        {{ $idol->grup }}
+                    </span>
                 </div>
                 <div class="p-5">
-                    <h3 class="text-lg font-bold">Jennie Kim</h3>
-                    <p class="text-gray-500 text-sm">Main Rapper, Lead Vocalist</p>
+                    <h3 class="text-lg font-bold text-gray-900">{{ $idol->nama_idol }}</h3>
+                    <p class="text-gray-500 text-sm">{{ $idol->deskripsi ?? 'Artist' }}</p>
+                    
                     <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
-                        <span class="text-xs text-purple-600 font-medium"><i class="fas fa-comments mr-1"></i> 12 Comments</span>
-                        <a href="/idols/jennie" class="bg-purple-50 text-purple-600 hover:bg-purple-100 text-xs font-semibold px-4 py-2 rounded-lg transition-colors">View Profile</a>
+                        <span class="text-xs text-purple-600 font-medium">
+                            <i class="fas fa-comments mr-1"></i> {{ $idol->comments_count ?? 0 }} Comments
+                        </span>
+                        
+                        <a href="/idols/{{ $idol->id }}" class="bg-purple-50 text-purple-600 hover:bg-purple-100 text-xs font-semibold px-4 py-2 rounded-lg transition-colors">
+                            View Profile
+                        </a>
                     </div>
                 </div>
             </div>
+            @empty
+            <div class="col-span-full text-center py-12 bg-white rounded-xl border border-gray-100">
+                <p class="text-gray-400 text-sm">Belum ada data idol di database. Silakan tambahkan melalui Admin Panel!</p>
+            </div>
+            @endforelse
         </div>
     </div>
 </body>
