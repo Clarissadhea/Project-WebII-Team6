@@ -54,7 +54,7 @@
                         <td class="py-3 font-medium text-gray-900">{{ $idol->nama_idol }}</td>
                         <td class="py-3 text-gray-500">{{ $idol->grup }}</td>
                         <td class="py-3 flex gap-2 items-center">
-                            <button class="bg-blue-50 text-blue-600 px-3 py-1 rounded hover:bg-blue-100" onclick="openEditModal({{ $idol->id }}, '{{ $idol->nama_idol }}', '{{ $idol->grup }}', '{{ $idol->deskripsi }}')">
+                            <button type="button" class="bg-blue-50 text-blue-600 px-3 py-1 rounded hover:bg-blue-100" onclick="openEditModal({{ $idol->id }}, `{{ addslashes($idol->nama_idol) }}`, `{{ addslashes($idol->grup) }}`, `{{ addslashes($idol->deskripsi) }}`)">
                                 <i class="fas fa-edit"></i>
                             </button>
                             

@@ -12,19 +12,27 @@ use Illuminate\Support\Facades\Auth;
 class IdolController extends Controller
 {
     public function index()
-    {
-        $idols = Idol::withCount('comments')->get();
-        
-        if (request()->is('admin/*')) {
-            return view('dashboard', compact('idols'));
+{
+    $idols = Idol::withCount('comments')->get();
+    
+    if (request()->is('admin/*')) {
+        if (Auth::check() && Auth::user()->role !== 'admin') {
+            return redirect('/')->with('error', 'Anda tidak memiliki akses ke halaman Admin!');
         }
-        
-        return view('welcome', compact('idols'));
+        return view('dashboard', compact('idols'));
     }
+    return view('welcome', compact('idols'));
+}
 
     public function create()
     {
         return view('form_idol');
+    }
+
+    public function edit($id)
+    {
+        $idol = Idol::findOrFail($id);
+        return view('form_idol', compact('idol'));
     }
 
     public function store(Request $request)
@@ -35,15 +43,12 @@ class IdolController extends Controller
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'deskripsi' => 'nullable|string',
         ]);
-
         $input = $request->all();
 
         if ($request->hasFile('foto')) {
             $input['foto'] = $request->file('foto')->store('idols', 'public');
         }
-
         Idol::create($input);
-
         return redirect()->route('admin.dashboard')->with('success', 'Idol berhasil ditambahkan!');
     }
 
@@ -51,7 +56,6 @@ class IdolController extends Controller
     {
         $idol = Idol::findOrFail($id);
         $comments = Comment::where('idol_id', $id)->with('user')->latest()->get();
-
         return view('idols.show', compact('idol', 'comments'));
     }
 
@@ -73,9 +77,7 @@ class IdolController extends Controller
             }
             $input['foto'] = $request->file('foto')->store('idols', 'public');
         }
-
         $idol->update($input);
-
         return redirect()->route('admin.dashboard')->with('success', 'Data Idol berhasil diperbarui!');
     }
 
@@ -86,9 +88,7 @@ class IdolController extends Controller
         if ($idol->foto && Storage::disk('public')->exists($idol->foto)) {
             Storage::disk('public')->delete($idol->foto);
         }
-
         $idol->delete();
-
         return redirect()->back()->with('success', 'Data Idol berhasil dihapus permanen!');
     }
 
@@ -103,7 +103,17 @@ class IdolController extends Controller
             'user_id' => Auth::check() ? Auth::id() : null,
             'isi_komentar' => $request->isi_komentar,
         ]);
-
         return redirect()->back()->with('success', 'Komentar Anda berhasil dikirim!');
+    }
+
+    public function destroyComment($id)
+    {
+        $comment = Comment::findOrFail($id);
+
+        if (Auth::user()->role === 'admin' || Auth::id() === $comment->user_id) {
+            $comment->delete();
+            return redirect()->back()->with('success', 'Komentar berhasil dihapus!');
+        }
+        return redirect()->back()->with('error', 'Anda tidak berhak menghapus komentar ini.');
     }
 }

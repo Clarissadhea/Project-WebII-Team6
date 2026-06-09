@@ -14,9 +14,23 @@
                 <a href="/idols" class="text-2xl font-bold text-pink-600">IdolVerse</a>
             </div>
             <div class="flex items-center space-x-3">
-                <a href="/login" class="text-gray-600 hover:text-purple-600 text-sm font-medium px-3 py-2">Login</a>
-                <a href="/register" class="bg-purple-600 text-white text-sm font-medium px-4 py-2 rounded-lg shadow hover:bg-purple-700">Register</a>
-                <a href="/admin/dashboard" class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded hover:bg-gray-200"><i class="fas fa-lock"></i> Admin Panel</a>
+                @guest
+                    <a href="/login" class="text-gray-600 hover:text-purple-600 text-sm font-medium px-3 py-2">Login</a>
+                    <a href="/register" class="bg-purple-600 text-white text-sm font-medium px-4 py-2 rounded-lg shadow hover:bg-purple-700">Register</a>
+                @endguest
+
+                @auth
+                    <span class="text-gray-600 text-sm font-medium px-3 py-2">Hi, {{ Auth::user()->name }}</span>
+                    
+                    @if(Auth::user()->role === 'admin')
+                        <a href="/admin/dashboard" class="text-xs bg-pink-100 text-pink-600 px-3 py-2 rounded-lg hover:bg-pink-200 font-bold"><i class="fas fa-lock"></i> Admin Panel</a>
+                    @endif
+
+                    <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
+                        @csrf
+                        <button type="submit" class="text-red-500 hover:text-red-700 text-sm font-medium px-3 py-2 bg-red-50 hover:bg-red-100 rounded-lg transition">Logout</button>
+                    </form>
+                @endauth
             </div>
         </div>
     </nav>
@@ -39,7 +53,9 @@
                     @if($idol->foto)
                         <img src="{{ asset('storage/' . $idol->foto) }}" class="w-full h-full object-cover">
                     @else
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="w-full h-full object-cover">
+                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-user text-gray-400 text-6xl"></i>
+                        </div>
                     @endif
 
                     <span class="absolute top-3 right-3 bg-pink-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">

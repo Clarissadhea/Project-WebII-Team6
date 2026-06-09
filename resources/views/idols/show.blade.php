@@ -15,8 +15,23 @@
                 <a href="/idols" class="text-2xl font-bold text-pink-600">IdolVerse</a>
             </div>
             <div class="flex items-center space-x-3">
-                <a href="/idols" class="text-gray-600 hover:text-purple-600 text-sm font-medium px-3 py-2"><i class="fas fa-home"></i> Home</a>
-                <a href="/admin/dashboard" class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded hover:bg-gray-200"><i class="fas fa-lock"></i> Admin Panel</a>
+                @guest
+                    <a href="/login" class="text-gray-600 hover:text-purple-600 text-sm font-medium px-3 py-2">Login</a>
+                    <a href="/register" class="bg-purple-600 text-white text-sm font-medium px-4 py-2 rounded-lg shadow hover:bg-purple-700">Register</a>
+                @endguest
+
+                @auth
+                    <span class="text-gray-600 text-sm font-medium px-3 py-2">Hi, {{ Auth::user()->name }}</span>
+                    
+                    @if(Auth::user()->role === 'admin')
+                        <a href="/admin/dashboard" class="text-xs bg-pink-100 text-pink-600 px-3 py-2 rounded-lg hover:bg-pink-200 font-bold"><i class="fas fa-lock"></i> Admin Panel</a>
+                    @endif
+
+                    <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
+                        @csrf
+                        <button type="submit" class="text-red-500 hover:text-red-700 text-sm font-medium px-3 py-2 bg-red-50 hover:bg-red-100 rounded-lg transition">Logout</button>
+                    </form>
+                @endauth
             </div>
         </div>
     </nav>
@@ -72,15 +87,22 @@
             <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                 <h2 class="text-lg font-bold text-gray-900 mb-4"><i class="far fa-comments text-purple-600 mr-2"></i>Fan Discussions</h2>
                 
-                <form action="{{ route('idols.comment.store', $idol->id) }}" method="POST" class="space-y-3">
-                    @csrf
-                    <textarea name="isi_komentar" rows="3" class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm" placeholder="Write a supportive comment..." required></textarea>
-                    <div class="flex justify-end">
-                        <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-medium text-sm px-5 py-2 rounded-lg shadow transition-colors">
-                            Post Comment
-                        </button>
+                @auth
+                    <form action="{{ route('idols.comment.store', $idol->id) }}" method="POST" class="space-y-3">
+                        @csrf
+                        <textarea name="isi_komentar" rows="3" class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm" placeholder="Write a supportive comment..." required></textarea>
+                        <div class="flex justify-end">
+                            <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-medium text-sm px-5 py-2 rounded-lg shadow transition-colors">
+                                Post Comment
+                            </button>
+                        </div>
+                    </form>
+                @else
+                    <div class="bg-purple-50 border border-purple-100 rounded-lg p-6 text-center">
+                        <p class="text-gray-600 text-sm mb-3">Ingin ikut berdiskusi tentang {{ $idol->nama_idol }}?</p>
+                        <a href="/login" class="inline-block bg-purple-600 text-white font-semibold text-sm px-5 py-2 rounded-lg hover:bg-purple-700 transition-colors">Login Sekarang</a>
                     </div>
-                </form>
+                @endauth
 
                 <div class="mt-8 space-y-4">
                     @forelse($comments as $comment)
@@ -90,8 +112,20 @@
                         </div>
                         <div class="flex-1">
                             <div class="flex justify-between items-center">
-                                <span class="font-bold text-xs text-gray-900">{{ $comment->user->name ?? 'Anonymous Fan' }}</span>
-                                <span class="text-[10px] text-gray-400">{{ $comment->created_at->diffForHumans() }}</span>
+                                <div>
+                                    <span class="font-bold text-xs text-gray-900">{{ $comment->user->name ?? 'Anonymous Fan' }}</span>
+                                    <span class="text-[10px] text-gray-400 ml-2">{{ $comment->created_at->diffForHumans() }}</span>
+                                </div>
+                                
+                                @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::id() === $comment->user_id))
+                                    <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="m-0 p-0">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700 text-[10px] font-bold uppercase tracking-wider transition-colors" onclick="return confirm('Yakin hapus komentar ini?')">
+                                            <i class="fas fa-trash mr-1"></i>Hapus
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
                             <p class="text-gray-600 text-sm mt-1">{{ $comment->isi_komentar }}</p>
                         </div>
