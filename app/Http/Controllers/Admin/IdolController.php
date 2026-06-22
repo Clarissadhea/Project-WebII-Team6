@@ -11,18 +11,27 @@ use Illuminate\Support\Facades\Auth;
 
 class IdolController extends Controller
 {
-    public function index()
-{
-    $idols = Idol::withCount('comments')->get();
-    
-    if (request()->is('admin/*')) {
-        if (Auth::check() && Auth::user()->role !== 'admin') {
-            return redirect('/')->with('error', 'Anda tidak memiliki akses ke halaman Admin!');
+    public function index(Request $request)
+    {
+        $query = Idol::withCount('comments');
+
+        if ($request->has('search') && $request->search != '') {
+            $query->where('nama_idol', 'like', '%' . $request->search . '%')
+                  ->orWhere('grup', 'like', '%' . $request->search . '%');
         }
-        return view('dashboard', compact('idols'));
+
+        // 3. Ambil hasil datanya
+        $idols = $query->get();
+        
+        if ($request->is('admin/*')) {
+            if (Auth::check() && Auth::user()->role !== 'admin') {
+                return redirect('/')->with('error', 'Anda tidak memiliki akses ke halaman Admin!');
+            }
+            return view('dashboard', compact('idols'));
+        }
+        
+        return view('welcome', compact('idols'));
     }
-    return view('welcome', compact('idols'));
-}
 
     public function create()
     {

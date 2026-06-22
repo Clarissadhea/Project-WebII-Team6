@@ -73,15 +73,14 @@
                     Encyclopedia and community discussions for K-Pop & J-Pop fans around the universe.
                 </p>
 
-                <div
-                    class="mt-8 max-w-md mx-auto bg-white p-2 rounded-full shadow-xl flex items-center border border-[#E5D1FA]">
-                    <input type="text" placeholder="Search your beloved idol..."
+                <form action="/" method="GET" class="mt-8 max-w-md mx-auto bg-white p-2 rounded-full shadow-xl flex items-center border border-[#E5D1FA]">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search your beloved idol..."
                         class="w-full pl-4 pr-2 py-2 text-sm bg-transparent focus:outline-none text-gray-700">
-                    <button
+                    <button type="submit"
                         class="bg-[#D2386C] hover:bg-[#b82f5d] text-white px-5 py-2 text-sm font-semibold rounded-full transition shadow-md shadow-[#D2386C]/10">
                         Search
                     </button>
-                </div>
+                </form>
             </div>
         </header>
 
@@ -131,8 +130,7 @@
                     </div>
                 @empty
                     <div class="col-span-full bg-white rounded-2xl p-12 text-center border border-dashed border-[#E5D1FA]">
-                        <p class="text-gray-500 font-medium">Belum ada data idol di database. Silakan tambahkan melalui
-                            Admin Panel!</p>
+                        <p class="text-gray-500 font-medium">Belum ada data idol di database.</p>
                     </div>
                 @endforelse
             </div>
