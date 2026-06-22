@@ -21,7 +21,10 @@ Route::post('/register', [AuthController::class, 'registerPost'])->name('registe
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::delete('/comments/{id}', [IdolController::class, 'destroyComment'])->name('comments.destroy')->middleware('auth');
+    Route::delete('/comments/{id}', [IdolController::class, 'destroyComment'])->name('comments.destroy');
+});
+
+Route::middleware(['auth', \App\Http\Middleware\CekAdmin::class])->group(function () {
     
     Route::get('/admin/dashboard', function () {
         $idols = \App\Models\Idol::all(); 
