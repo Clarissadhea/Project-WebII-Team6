@@ -47,7 +47,7 @@ Proyek ini dikembangkan untuk memenuhi standar kompetensi Pemrograman Web II den
 
 ### 📱 Responsive Design
 
-* Tampilan responsif untuk desktop maupun perangkat mobile.
+* Tampilan responsif untuk desktop.
 * Dibangun menggunakan Tailwind CSS.
 
 ---
