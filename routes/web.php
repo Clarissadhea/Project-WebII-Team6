@@ -22,10 +22,16 @@ Route::post('/register', [AuthController::class, 'registerPost'])->name('registe
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::delete('/comments/{id}', [IdolController::class, 'destroyComment'])->name('comments.destroy')->middleware('auth');
-    Route::get('/admin/dashboard', [IdolController::class, 'index'])->name('admin.dashboard');
+    
+    Route::get('/admin/dashboard', function () {
+        $idols = \App\Models\Idol::all(); 
+        return view('dashboard', compact('idols'));
+    })->name('admin.dashboard');
+
     Route::get('/admin/idols/create', function () { 
         return view('form_idol'); 
     })->name('admin.idols.create');
+    
     Route::get('/admin/idols/{id}/edit', [IdolController::class, 'edit'])->name('admin.idols.edit');
     Route::post('/admin/idols', [IdolController::class, 'store'])->name('admin.idols.store');
     Route::put('/admin/idols/{id}', [IdolController::class, 'update'])->name('admin.idols.update');
