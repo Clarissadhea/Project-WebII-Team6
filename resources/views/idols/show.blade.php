@@ -28,6 +28,7 @@
                 </div>
 
                 <div class="flex items-center space-x-3">
+
                     @guest
                         <a href="/login"
                             class="text-gray-600 hover:text-[#D2386C] text-sm font-semibold px-3 py-2 transition">Login</a>

@@ -13,8 +13,8 @@ class IdolSeeder extends Seeder
         DB::table('idols')->insert([
             [
                 'nama_idol' => 'Makoto Hasegawa',
-                'grup' => 'THE RAMPAGAE',
-                'foto' => 'makoto.jpg',
+                'grup' => 'THE RAMPAGE',
+                'foto' => 'images/idols/makoto.jpg',
                 'deskripsi' => 'Main Dancer',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -22,7 +22,7 @@ class IdolSeeder extends Seeder
             [
                 'nama_idol' => 'Minji',
                 'grup' => 'NewJeans',
-                'foto' => 'minji.jpg',
+                'foto' => 'images/idols/minji.jpg',
                 'deskripsi' => 'Leader',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -30,7 +30,7 @@ class IdolSeeder extends Seeder
             [
                 'nama_idol' => 'LISA',
                 'grup' => 'BLACKPINK',
-                'foto' => 'lisa.jpg',
+                'foto' => 'images/idols/lisa.jpg',
                 'deskripsi' => 'Main Rapper',
                 'created_at' => now(),
                 'updated_at' => now(),
