@@ -1,88 +1,111 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IdolVerse - Home</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>IdolVerse - Explore Your Favorite Idols</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 font-sans text-gray-800">
-
-    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-            <div class="flex-shrink-0 flex items-center">
-                <a href="/idols" class="text-2xl font-bold text-pink-600">IdolVerse</a>
-            </div>
-            <div class="flex items-center space-x-3">
-                @guest
-                    <a href="/login" class="text-gray-600 hover:text-purple-600 text-sm font-medium px-3 py-2">Login</a>
-                    <a href="/register" class="bg-purple-600 text-white text-sm font-medium px-4 py-2 rounded-lg shadow hover:bg-purple-700">Register</a>
-                @endguest
-
-                @auth
-                    <span class="text-gray-600 text-sm font-medium px-3 py-2">Hi, {{ Auth::user()->name }}</span>
-                    
-                    @if(Auth::user()->role === 'admin')
-                        <a href="/admin/dashboard" class="text-xs bg-pink-100 text-pink-600 px-3 py-2 rounded-lg hover:bg-pink-200 font-bold"><i class="fas fa-lock"></i> Admin Panel</a>
-                    @endif
-
-                    <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
-                        @csrf
-                        <button type="submit" class="text-red-500 hover:text-red-700 text-sm font-medium px-3 py-2 bg-red-50 hover:bg-red-100 rounded-lg transition">Logout</button>
-                    </form>
-                @endauth
+<body class="bg-[#FFF9E6] text-gray-800 min-h-screen flex flex-col justify-between">
+  
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-[#E5D1FA] px-6 py-4 shadow-sm">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold tracking-wider text-[#D2386C]">
+                Idol<span class="text-gray-700">Verse</span>
+            </a>
+  
+            <div class="flex items-center gap-4">
+                @if (Route::has('login'))  
+                    @auth  
+                        <a href="{{ url('/dashboard') }}" class="text-sm font-semibold text-gray-700 hover:text-[#D2386C] transition">Dashboard</a>  
+                    @else  
+                        <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-600 hover:text-[#D2386C] transition px-4 py-2">Login</a>  
+                        @if (Route::has('register'))  
+                            <a href="{{ route('register') }}" class="text-sm font-semibold text-white bg-[#D2386C] hover:bg-[#b82f5d] shadow-md shadow-[#D2386C]/20 transition px-5 py-2.5 rounded-full">Register</a>  
+                        @endif  
+                    @endauth  
+                @endif  
             </div>
         </div>
     </nav>
-
-    <div class="bg-gradient-to-r from-purple-600 to-pink-500 text-white py-12 text-center">
-        <h1 class="text-4xl font-extrabold tracking-tight">Explore Your Favorite Idols</h1>
-        <p class="mt-2 text-purple-100 max-w-md mx-auto">Encyclopedia and community discussions for K-Pop & J-Pop fans.</p>
-    </div>
-
-    <div class="max-w-7xl mx-auto px-4 py-10">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-bold text-gray-900">Featured Idols</h2>
+  
+    <header class="max-w-7xl mx-auto w-full px-6 pt-8 pb-4">
+        <div class="bg-gradient-to-r from-[#E5D1FA] via-[#D0E7FF] to-[#FFF9E6] rounded-3xl p-8 md:p-16 text-center shadow-inner relative overflow-hidden">
+            <div class="absolute -top-10 -left-10 w-40 h-40 bg-white/20 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-[#D2386C]/10 rounded-full blur-2xl"></div>
+              
+            <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 tracking-tight leading-tight max-w-3xl mx-auto">
+                Explore Your <span class="text-[#D2386C]">Favorite Idols</span>
+            </h1>
+            <p class="mt-4 text-base md:text-lg text-gray-600 font-medium max-w-xl mx-auto">
+                Encyclopedia and community discussions for K-Pop & J-Pop fans around the universe.
+            </p>
+              
+            <div class="mt-8 max-w-md mx-auto bg-white p-2 rounded-full shadow-xl flex items-center border border-[#E5D1FA]">
+                <input type="text" placeholder="Search your beloved idol..." class="w-full pl-4 pr-2 py-2 text-sm bg-transparent focus:outline-none text-gray-700">
+                <button class="bg-[#D2386C] hover:bg-[#b82f5d] text-white px-5 py-2 text-sm font-semibold rounded-full transition shadow-md shadow-[#D2386C]/10">
+                    Search
+                </button>
+            </div>
         </div>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            @forelse($idols as $idol)
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
-                <div class="h-48 overflow-hidden relative">
-                    
-                    @if($idol->foto)
-                        <img src="{{ asset('storage/' . $idol->foto) }}" class="w-full h-full object-cover">
-                    @else
-                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
-                            <i class="fas fa-user text-gray-400 text-6xl"></i>
-                        </div>
-                    @endif
-
-                    <span class="absolute top-3 right-3 bg-pink-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
-                        {{ $idol->grup }}
-                    </span>
-                </div>
-                <div class="p-5">
-                    <h3 class="text-lg font-bold text-gray-900">{{ $idol->nama_idol }}</h3>
-                    <p class="text-gray-500 text-sm">{{ $idol->deskripsi ?? 'Artist' }}</p>
-                    
-                    <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
-                        <span class="text-xs text-purple-600 font-medium">
-                            <i class="fas fa-comments mr-1"></i> {{ $idol->comments_count ?? 0 }} Comments
+    </header>
+  
+    <main class="max-w-7xl mx-auto w-full px-6 py-12 flex-grow">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <span class="w-2.5 h-6 bg-[#D2386C] rounded-full inline-block"></span>
+                Featured Idols
+            </h2>
+            <span class="text-xs font-semibold bg-[#D0E7FF] text-blue-700 px-3 py-1.5 rounded-full">🔥 Updated Today</span>
+        </div>
+  
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            @forelse($idols ?? [] as $idol)  
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 border border-[#E5D1FA]/40 flex flex-col justify-between">
+                    <div class="relative">
+                        <img src="{{ asset('storage/' . $idol->image) }}" alt="{{ $idol->name }}" class="w-full h-56 object-cover bg-gray-100" onerror="this.src='https://placehold.co/400x300?text=No+Image'">
+                        <span class="absolute top-3 right-3 bg-[#D2386C] text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                            {{ $idol->group ?? 'Soloist' }}  
                         </span>
-                        
-                        <a href="/idols/{{ $idol->id }}" class="bg-purple-50 text-purple-600 hover:bg-purple-100 text-xs font-semibold px-4 py-2 rounded-lg transition-colors">
-                            View Profile
-                        </a>
+                    </div>
+                      
+                    <div class="p-5 flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900 hover:text-[#D2386C] transition">{{ $idol->name }}</h3>
+                            <p class="text-xs text-gray-400 font-medium mt-0.5">{{ $idol->role ?? 'Performer' }}</p>
+                            <p class="text-sm text-gray-600 mt-3 line-clamp-2 leading-relaxed">{{ $idol->description ?? 'No description available.' }}</p>
+                        </div>
+                          
+                        <div class="mt-5 pt-4 border-t border-gray-50 flex items-center justify-between">
+                            <span class="text-xs font-medium text-gray-500 flex items-center gap-1">
+                                💬 {{ $idol->comments_count ?? 0 }} Comments  
+                            </span>
+                            <a href="{{ url('/idols/' . $idol->id) }}" class="text-xs font-bold text-[#D2386C] hover:underline bg-[#E5D1FA]/30 px-3 py-1.5 rounded-lg transition">
+                                View Profile  
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            @empty
-            <div class="col-span-full text-center py-12 bg-white rounded-xl border border-gray-100">
-                <p class="text-gray-400 text-sm">Belum ada data idol di database. Silakan tambahkan melalui Admin Panel!</p>
-            </div>
-            @endforelse
+            @empty  
+
+                <div class="col-span-full bg-white rounded-2xl p-12 text-center border border-dashed border-[#E5D1FA]">
+                    <p class="text-gray-500 font-medium">Belum ada data idol di database. Silakan tambahkan melalui Admin Panel!</p>
+                </div>
+            @endforelse  
         </div>
-    </div>
+    </main>
+  
+    <footer class="bg-white border-t border-[#E5D1FA] py-6 text-center text-xs text-gray-500 font-medium">
+        <p>© 2026 IdolVerse Kelompok 6. All rights reserved.</p>
+    </footer>
+  
 </body>
 </html>
